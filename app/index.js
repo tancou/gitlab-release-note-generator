@@ -22,6 +22,7 @@ const container = ConfigureContainer();
                         "-TARGET_BRANCH [regex string] -TARGET_TAG_REGEX [regex string] " +
                         "-SERVICE_PROVIDER [string] " +
                         "-ISSUE_CLOSED_SECONDS [num] " +
+                        "-ASSET_FILE_URL [url] " +
                         "-TZ [string] -NODE_ENV [string]"
                 )
                 .demandOption(["GITLAB_PERSONAL_TOKEN", "GITLAB_PROJECT_ID"]);
@@ -40,6 +41,7 @@ const container = ConfigureContainer();
         if (env.SERVICE_PROVIDER) config.SERVICE_PROVIDER = env.SERVICE_PROVIDER;
         if (env.TZ) config.TZ = env.TZ;
         if (env.NODE_ENV) config.NODE_ENV = env.NODE_ENV;
+        if (env.ASSET_FILE_URL) config.ASSET_FILE_URL = env.ASSET_FILE_URL;
         container.register({ config: asValue(config) });
         const GitLabReleaseNoteGenerator = container.resolve("gitLabReleaseNoteGenerator");
         await GitLabReleaseNoteGenerator.run();

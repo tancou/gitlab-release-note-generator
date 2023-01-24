@@ -57,7 +57,8 @@ module.exports = class GitLabReleaseNoteGenerator {
         await publisher.publish({
             projectId: this.config.GITLAB_PROJECT_ID,
             tag: latestTag,
-            content
+            content,
+            assetFileUrl: this.config.ASSET_FILE_URL
         });
     }
 };

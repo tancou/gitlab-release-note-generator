@@ -12,5 +12,6 @@ exports.defaultOptions = {
     GITLAB_API_ENDPOINT: "https://gitlab.com/api/v4",
     NODE_ENV: process.env.NODE_ENV,
     TZ: "Australia/Melbourne",
-    SERVICE_PROVIDER: exports.SERVICE_PROVIDER_GITLAB
+    SERVICE_PROVIDER: exports.SERVICE_PROVIDER_GITLAB,
+    ASSET_FILE_URL: null
 };
