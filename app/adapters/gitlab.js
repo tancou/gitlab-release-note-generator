@@ -10,7 +10,7 @@ module.exports = class GitlabAdapter {
             responseType: "json"
         };
     }
-    _decorateLinks(link, templateFunction, templateArgs, query) {
+    _decorateLinks(link, templateFunction, templateArgs, query, that) {
         const linkObj = {};
         if (link) {
             link = LinkHeaderParse(link);
@@ -18,7 +18,8 @@ module.exports = class GitlabAdapter {
                 linkObj[key] = () =>
                     templateFunction.apply(null, [
                         ...templateArgs,
-                        { ...query, page: link[key].page, per_page: link[key].per_page }
+                        { ...query, page: link[key].page, per_page: link[key].per_page },
+                        that
                     ]);
             }
         }
@@ -32,17 +33,21 @@ module.exports = class GitlabAdapter {
         return response.body;
     }
 
-    async searchMergeRequestsByProjectId(projectId, query) {
+    async searchMergeRequestsByProjectId(projectId, query, that) {
         const queryString = query ? new URLSearchParams(query).toString() : null;
+        if(!that) {
+            that = this
+        }
         const response = await Got.get(
-            `${this.GITLAB_API_ENDPOINT}/projects/${projectId}/merge_requests${queryString ? `?${queryString}` : ""}`,
-            { ...this.gotDefaultOptions }
+            `${that.GITLAB_API_ENDPOINT}/projects/${projectId}/merge_requests${queryString ? `?${queryString}` : ""}`,
+            { ...that.gotDefaultOptions }
         );
-        const linkObj = this._decorateLinks(
+        const linkObj = that._decorateLinks(
             response.headers.link,
-            this.searchMergeRequestsByProjectId,
+            that.searchMergeRequestsByProjectId,
             [projectId],
-            query
+            query,
+            that
         );
         return {
             mergeRequests: response.body || [],
@@ -50,30 +55,36 @@ module.exports = class GitlabAdapter {
         };
     }
 
-    async searchIssuesByProjectId(projectId, query) {
+    async searchIssuesByProjectId(projectId, query, that) {
         const queryString = query ? new URLSearchParams(query).toString() : null;
+        if(!that) {
+            that = this
+        }
         const response = await Got.get(
-            `${this.GITLAB_API_ENDPOINT}/projects/${projectId}/issues${queryString ? `?${queryString}` : ""}`,
+            `${that.GITLAB_API_ENDPOINT}/projects/${projectId}/issues${queryString ? `?${queryString}` : ""}`,
             {
-                ...this.gotDefaultOptions
+                ...that.gotDefaultOptions
             }
         );
-        const linkObj = this._decorateLinks(response.headers.link, this.searchIssuesByProjectId, [projectId], query);
+        const linkObj = that._decorateLinks(response.headers.link, that.searchIssuesByProjectId, [projectId], query, that);
         return {
             issues: response.body || [],
             _link: linkObj
         };
     }
 
-    async searchTagsByProjectId(projectId, query) {
+    async searchTagsByProjectId(projectId, query, that) {
         const queryString = query ? new URLSearchParams(query).toString() : null;
+        if(!that) {
+            that = this
+        }
         const response = await Got.get(
-            `${this.GITLAB_API_ENDPOINT}/projects/${projectId}/repository/tags${queryString ? `?${queryString}` : ""}`,
+            `${that.GITLAB_API_ENDPOINT}/projects/${projectId}/repository/tags${queryString ? `?${queryString}` : ""}`,
             {
-                ...this.gotDefaultOptions
+                ...that.gotDefaultOptions
             }
         );
-        const linkObj = this._decorateLinks(response.headers.link, this.searchTagsByProjectId, [projectId], query);
+        const linkObj = that._decorateLinks(response.headers.link, that.searchTagsByProjectId, [projectId], query, that);
         return {
             tags: response.body,
             _link: linkObj
