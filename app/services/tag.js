@@ -34,7 +34,7 @@ module.exports = class TagService {
             let page = 0;
             while (!secondLatestTag) {
                 for (const tag of tags) {
-                    if (this.isTagsMatchTargetTagRegex([tag], this.config.TARGET_TAG_REGEX)) {
+                    if (this.isTagsMatchTargetTagRegex([tag], this.config.TARGET_PREVIOUS_TAG_REGEX)) {
                         const branches = await this.gitlabRepository.findBranchRefsByProjectIdAndSha(
                             this.projectId,
                             latestTag.commit?.id
@@ -46,6 +46,8 @@ module.exports = class TagService {
                             secondLatestTag = tag;
                             break;
                         }
+                    } else {
+                        this.logger.info(`The tag ${tag.name} does not match regex ${this.config.TARGET_PREVIOUS_TAG_REGEX}.`)
                     }
                     if (secondLatestTag) break;
                 }

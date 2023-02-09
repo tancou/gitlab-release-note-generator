@@ -19,7 +19,7 @@ const container = ConfigureContainer();
                 .usage(
                     "Usage: $0 -GITLAB_API_ENDPOINT [string] " +
                         "-GITLAB_PERSONAL_TOKEN [string] -GITLAB_PROJECT_ID [string] " +
-                        "-TARGET_BRANCH [regex string] -TARGET_TAG_REGEX [regex string] " +
+                        "-TARGET_BRANCH [regex string] -TARGET_TAG_REGEX [regex string] -TARGET_PREVIOUS_TAG_REGEX [regex string] " +
                         "-SERVICE_PROVIDER [string] " +
                         "-ISSUE_CLOSED_SECONDS [num] " +
                         "-ASSET_FILE_URL [url] " +
@@ -36,7 +36,11 @@ const container = ConfigureContainer();
         if (env.GITLAB_PERSONAL_TOKEN) config.GITLAB_PERSONAL_TOKEN = env.GITLAB_PERSONAL_TOKEN;
         if (env.GITLAB_PROJECT_ID) config.GITLAB_PROJECT_ID = env.GITLAB_PROJECT_ID;
         if (env.TARGET_BRANCH) config.TARGET_BRANCH = env.TARGET_BRANCH;
-        if (env.TARGET_TAG_REGEX) config.TARGET_TAG_REGEX = env.TARGET_TAG_REGEX;
+        if (env.TARGET_TAG_REGEX) {
+            config.TARGET_TAG_REGEX = env.TARGET_TAG_REGEX;
+            config.TARGET_PREVIOUS_TAG_REGEX = env.TARGET_TAG_REGEX;
+        }
+        if (env.TARGET_PREVIOUS_TAG_REGEX) config.TARGET_PREVIOUS_TAG_REGEX = env.TARGET_PREVIOUS_TAG_REGEX;
         if (env.ISSUE_CLOSED_SECONDS) config.ISSUE_CLOSED_SECONDS = env.ISSUE_CLOSED_SECONDS;
         if (env.SERVICE_PROVIDER) config.SERVICE_PROVIDER = env.SERVICE_PROVIDER;
         if (env.TZ) config.TZ = env.TZ;

@@ -64,6 +64,7 @@ These can be specified using environment variables
 * GITLAB_PROJECT_ID: Your project id that is located under settings > general
 * TARGET_BRANCH: The branch to look for release tags (ie master)
 * TARGET_TAG_REGEX:  Regular expression of the release tags to search (ie: ^release-.*$)
+* TARGET_PREVIOUS_TAG_REGEX:  Regular expression of the previous compared release tags to search (ie: ^release-.*$)
 * TZ: The timezone for your release notes 
   * Default "Australia/Melbourne"
 * ISSUE_CLOSED_SECONDS: The amount of seconds to search after the last commit,  useful for Merge Requests that close their tickets a second after the commit.
@@ -87,6 +88,7 @@ docker container run \
   -e GITLAB_PROJECT_ID=$GITLAB_PROJECT_ID \
   -e TARGET_BRANCH=master \
   -e TARGET_TAG_REGEX=^release-.*$ \
+  -e TARGET_PREVIOUS_TAG_REGEX=^release-.*$ \
   local-gitlab-release-note-generator
 
 ```
